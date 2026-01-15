@@ -277,6 +277,62 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  '/namespaces/{namespace}/providers/{provider}/schema':
+    get:
+      tags:
+        - Provider
+      summary: Get data store CRD schema
+      description: |
+        This API returns the JSON schema for a specific provider's custom resource definition.
+
+        **Purpose:**
+        - Discover what fields and configurations are available for a data store type
+        - Dynamically render UI forms based on the schema structure
+        - Validate user input before submitting API requests
+        - Construct properly formatted data store creation/update requests
+
+        **Usage:**
+        1. Call this endpoint to get the schema for the chosen data store type
+        2. Parse the schema to identify fields, types, validation rules, and required properties
+        3. Dynamically render form components (text inputs, dropdowns, checkboxes, etc.)
+        4. Collect user input from the UI
+        5. Construct the request body following the schema structure
+        6. Submit to POST /namespaces/{namespace}/database-clusters
+
+        New data store operators automatically expose their schemas without UI code changes.
+      operationId: getDataStoreSchema
+      parameters:
+        - name: namespace
+          in: path
+          description: Name of the namespace
+          required: true
+          schema:
+            type: string
+        - name: provider
+          in: path
+          description: The provider name (e.g., pxc, postgresql, psmdb) for which to retrieve the schema
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataStoreSchema'
+        '404':
+          description: Provider not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   '/namespaces/{namespace}/database-clusters':
     x-everest-resource-name: database-clusters
     post:
@@ -2490,6 +2546,38 @@ components:
       properties:
         message:
           type: string
+    DataStoreSchema:
+      type: object
+      description: |-
+        The JSON schema for a data store's custom resource definition.
+
+        This schema enables schema-driven UI development:
+        - **Field Discovery**: Identifies all available configuration options
+        - **Type Information**: Specifies data types (string, number, boolean, object, array)
+        - **Validation Rules**: Includes constraints (min, max, pattern, enum, required)
+        - **Nested Structures**: Describes complex object hierarchies
+        - **Dynamic Rendering**: UI components parse this to generate forms automatically
+
+        The schema structure follows Kubernetes OpenAPI v3 format, which includes:
+        - `properties`: Object describing each field and its schema
+        - `required`: Array of required field names
+        - `type`: Data type of the value
+        - `description`: Human-readable field description
+        - `enum`: List of valid values for enum fields
+        - Various validation keywords (minimum, maximum, pattern, etc.)
+      properties:
+        dataStore:
+          type: string
+          description: The data store this schema represents
+        schema:
+          type: object
+          description: |-
+            The OpenAPI v3 JSON schema for this data store's CRD.
+            Contains properties, required fields, type information, and validation rules.
+          x-kubernetes-preserve-unknown-fields: true
+      required:
+        - dataStore
+        - schema
     NamespaceList:
       type: array
       items:
