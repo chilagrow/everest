@@ -277,7 +277,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  '/namespaces/{namespace}/providers/{provider}/schema':
+  '/clusters/{cluster}/namespaces/{namespace}/providers/{provider}/schema':
     get:
       tags:
         - Provider
@@ -302,6 +302,12 @@ paths:
         New data store operators automatically expose their schemas without UI code changes.
       operationId: getDataStoreSchema
       parameters:
+        - name: cluster
+          in: path
+          description: Name of the Kubernetes cluster
+          required: true
+          schema:
+            type: string
         - name: namespace
           in: path
           description: Name of the namespace
