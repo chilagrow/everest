@@ -339,24 +339,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  '/clusters/{cluster}/namespaces/{namespace}/providers/{provider}/features':
+  '/clusters/{cluster}/namespaces/{namespace}/providers/{provider}/extensions':
     get:
       tags:
         - Provider
-      summary: List provider features
+      summary: List provider extensions
       description: |
-        This API returns a list of features available for a specific provider.
+        This API returns a list of extensions available for a specific provider.
         
         **Purpose:**
-        - Discover what features are supported by the data store provider
-        - Identify configurable feature capabilities
-        - Determine which features can be enabled for data stores
+        - Discover what extensions are supported by the data store provider
+        - Identify configurable extension capabilities
+        - Determine which extensions can be enabled for data stores
         
         **Usage:**
-        1. Call this endpoint to list all available features for the provider
-        2. Use the feature schema endpoint to understand configuration options
-        3. Create features for data stores using the data store features endpoint
-      operationId: listProviderFeatures
+        1. Call this endpoint to list all available extensions for the provider
+        2. Use the extension schema endpoint to understand configuration options
+        3. Create extensions for data stores using the data store extensions endpoint
+      operationId: listProviderExtensions
       parameters:
         - name: cluster
           in: path
@@ -372,7 +372,7 @@ paths:
             type: string
         - name: provider
           in: path
-          description: The provider name (e.g., pxc, postgresql, psmdb) for which to retrieve features
+          description: The provider name (e.g., pxc, postgresql, psmdb) for which to retrieve extensions
           required: true
           schema:
             type: string
@@ -400,27 +400,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  '/clusters/{cluster}/namespaces/{namespace}/providers/{provider}/features/{feature}/schema':
+  '/clusters/{cluster}/namespaces/{namespace}/providers/{provider}/extensions/{extension}/schema':
     get:
       tags:
         - Provider
-      summary: Get feature schema
+      summary: Get extension schema
       description: |
-        This API returns the JSON schema for a specific feature of a provider.
+        This API returns the JSON schema for a specific extension of a provider.
         
         **Purpose:**
-        - Discover configuration options for a specific feature
-        - Dynamically render UI forms for feature configuration
-        - Validate feature configuration before submitting
-        - Understand required and optional feature parameters
+        - Discover configuration options for a specific extension
+        - Dynamically render UI forms for extension configuration
+        - Validate extension configuration before submitting
+        - Understand required and optional extension parameters
         
         **Usage:**
-        1. Call this endpoint to get the schema for the chosen feature
+        1. Call this endpoint to get the schema for the chosen extension
         2. Parse the schema to identify configuration fields and validation rules
         3. Dynamically render form components based on the schema
         4. Collect user input and validate against the schema
-        5. Submit feature configuration to the data store features endpoint
-      operationId: getFeatureSchema
+        5. Submit extension configuration to the data store extensions endpoint
+      operationId: getExtensionSchema
       parameters:
         - name: cluster
           in: path
@@ -440,9 +440,9 @@ paths:
           required: true
           schema:
             type: string
-        - name: feature
+        - name: extension
           in: path
-          description: The feature name for which to retrieve the schema
+          description: The extension name for which to retrieve the schema
           required: true
           schema:
             type: string
@@ -454,7 +454,7 @@ paths:
               schema:
                 type: object
         '404':
-          description: Feature or provider not found
+          description: Extension or provider not found
           content:
             application/json:
               schema:
@@ -465,25 +465,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  '/clusters/{cluster}/namespaces/{namespace}/data-stores/{dataStore}/features':
+  '/clusters/{cluster}/namespaces/{namespace}/data-stores/{dataStore}/extensions':
     post:
       tags:
-        - Data Store Feature
-      summary: Create data store feature
+        - Data Store Extension
+      summary: Create data store extension
       description: |
-        This API creates a new feature for a specific data store.
+        This API creates a new extension for a specific data store.
         
         **Purpose:**
-        - Enable and configure features for a data store instance
+        - Enable and configure extensions for a data store instance
         - Apply provider-specific capabilities to data stores
-        - Customize data store behavior with feature configurations
+        - Customize data store behavior with extension configurations
         
         **Usage:**
-        1. Use the provider features endpoint to list available features
-        2. Use the feature schema endpoint to understand configuration options
-        3. Construct the feature configuration following the schema
-        4. Call this endpoint to create the feature for the data store
-      operationId: createDataStoreFeature
+        1. Use the provider extensions endpoint to list available extensions
+        2. Use the extension schema endpoint to understand configuration options
+        3. Construct the extension configuration following the schema
+        4. Call this endpoint to create the extension for the data store
+      operationId: createDataStoreExtension
       parameters:
         - name: cluster
           in: path
@@ -535,7 +535,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
       requestBody:
-        description: The feature configuration to be created
+        description: The extension configuration to be created
         required: true
         content:
           application/json:
@@ -543,11 +543,11 @@ paths:
               type: object
     get:
       tags:
-        - Data Store Feature
-      summary: List data store features
+        - Data Store Extension
+      summary: List data store extensions
       description: |
-        This API lists all features configured for a specific data store.
-      operationId: listDataStoreFeatures
+        This API lists all extensions configured for a specific data store.
+      operationId: listDataStoreExtensions
       parameters:
         - name: cluster
           in: path
@@ -591,14 +591,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  '/clusters/{cluster}/namespaces/{namespace}/data-stores/{dataStore}/features/{feature}':
+  '/clusters/{cluster}/namespaces/{namespace}/data-stores/{dataStore}/extensions/{extension}':
     get:
       tags:
-        - Data Store Feature
-      summary: Get data store feature
+        - Data Store Extension
+      summary: Get data store extension
       description: |
-        This API retrieves a specific feature configuration for a data store.
-      operationId: getDataStoreFeature
+        This API retrieves a specific extension configuration for a data store.
+      operationId: getDataStoreExtension
       parameters:
         - name: cluster
           in: path
@@ -618,9 +618,9 @@ paths:
           required: true
           schema:
             type: string
-        - name: feature
+        - name: extension
           in: path
-          description: Name of the feature
+          description: Name of the extension
           required: true
           schema:
             type: string
@@ -632,7 +632,7 @@ paths:
               schema:
                 type: object
         '404':
-          description: Feature or data store not found
+          description: Extension or data store not found
           content:
             application/json:
               schema:
@@ -645,11 +645,11 @@ paths:
                 $ref: '#/components/schemas/Error'
     put:
       tags:
-        - Data Store Feature
-      summary: Update data store feature
+        - Data Store Extension
+      summary: Update data store extension
       description: |
-        This API updates an existing feature configuration for a data store.
-      operationId: updateDataStoreFeature
+        This API updates an existing extension configuration for a data store.
+      operationId: updateDataStoreExtension
       parameters:
         - name: cluster
           in: path
@@ -669,9 +669,9 @@ paths:
           required: true
           schema:
             type: string
-        - name: feature
+        - name: extension
           in: path
-          description: Name of the feature
+          description: Name of the extension
           required: true
           schema:
             type: string
@@ -689,7 +689,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
         '404':
-          description: Feature or data store not found
+          description: Extension or data store not found
           content:
             application/json:
               schema:
@@ -701,7 +701,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
       requestBody:
-        description: The updated feature configuration
+        description: The updated extension configuration
         required: true
         content:
           application/json:
@@ -709,11 +709,11 @@ paths:
               type: object
     delete:
       tags:
-        - Data Store Feature
-      summary: Delete data store feature
+        - Data Store Extension
+      summary: Delete data store extension
       description: |
-        This API deletes a feature configuration from a data store.
-      operationId: deleteDataStoreFeature
+        This API deletes an extension configuration from a data store.
+      operationId: deleteDataStoreExtension
       parameters:
         - name: cluster
           in: path
@@ -733,9 +733,9 @@ paths:
           required: true
           schema:
             type: string
-        - name: feature
+        - name: extension
           in: path
-          description: Name of the feature
+          description: Name of the extension
           required: true
           schema:
             type: string
@@ -749,7 +749,7 @@ paths:
         '204':
           description: Deleted successfully
         '404':
-          description: Feature or data store not found
+          description: Extension or data store not found
           content:
             application/json:
               schema:
