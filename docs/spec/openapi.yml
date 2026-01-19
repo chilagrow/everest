@@ -339,6 +339,427 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  '/clusters/{cluster}/namespaces/{namespace}/providers/{provider}/features':
+    get:
+      tags:
+        - Provider
+      summary: List provider features
+      description: |
+        This API returns a list of features available for a specific provider.
+        
+        **Purpose:**
+        - Discover what features are supported by the data store provider
+        - Identify configurable feature capabilities
+        - Determine which features can be enabled for data stores
+        
+        **Usage:**
+        1. Call this endpoint to list all available features for the provider
+        2. Use the feature schema endpoint to understand configuration options
+        3. Create features for data stores using the data store features endpoint
+      operationId: listProviderFeatures
+      parameters:
+        - name: cluster
+          in: path
+          description: Name of the Kubernetes cluster
+          required: true
+          schema:
+            type: string
+        - name: namespace
+          in: path
+          description: Name of the namespace
+          required: true
+          schema:
+            type: string
+        - name: provider
+          in: path
+          description: The provider name (e.g., pxc, postgresql, psmdb) for which to retrieve features
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+        '404':
+          description: Provider not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  '/clusters/{cluster}/namespaces/{namespace}/providers/{provider}/features/{feature}/schema':
+    get:
+      tags:
+        - Provider
+      summary: Get feature schema
+      description: |
+        This API returns the JSON schema for a specific feature of a provider.
+        
+        **Purpose:**
+        - Discover configuration options for a specific feature
+        - Dynamically render UI forms for feature configuration
+        - Validate feature configuration before submitting
+        - Understand required and optional feature parameters
+        
+        **Usage:**
+        1. Call this endpoint to get the schema for the chosen feature
+        2. Parse the schema to identify configuration fields and validation rules
+        3. Dynamically render form components based on the schema
+        4. Collect user input and validate against the schema
+        5. Submit feature configuration to the data store features endpoint
+      operationId: getFeatureSchema
+      parameters:
+        - name: cluster
+          in: path
+          description: Name of the Kubernetes cluster
+          required: true
+          schema:
+            type: string
+        - name: namespace
+          in: path
+          description: Name of the namespace
+          required: true
+          schema:
+            type: string
+        - name: provider
+          in: path
+          description: The provider name (e.g., pxc, postgresql, psmdb)
+          required: true
+          schema:
+            type: string
+        - name: feature
+          in: path
+          description: The feature name for which to retrieve the schema
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '404':
+          description: Feature or provider not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  '/clusters/{cluster}/namespaces/{namespace}/data-stores/{dataStore}/features':
+    post:
+      tags:
+        - Data Store Feature
+      summary: Create data store feature
+      description: |
+        This API creates a new feature for a specific data store.
+        
+        **Purpose:**
+        - Enable and configure features for a data store instance
+        - Apply provider-specific capabilities to data stores
+        - Customize data store behavior with feature configurations
+        
+        **Usage:**
+        1. Use the provider features endpoint to list available features
+        2. Use the feature schema endpoint to understand configuration options
+        3. Construct the feature configuration following the schema
+        4. Call this endpoint to create the feature for the data store
+      operationId: createDataStoreFeature
+      parameters:
+        - name: cluster
+          in: path
+          description: Name of the Kubernetes cluster
+          required: true
+          schema:
+            type: string
+        - name: namespace
+          in: path
+          description: Name of the namespace
+          required: true
+          schema:
+            type: string
+        - name: dataStore
+          in: path
+          description: Name of the data store
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '201':
+          description: Created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Unsuccessful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Data store not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        description: The feature configuration to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+    get:
+      tags:
+        - Data Store Feature
+      summary: List data store features
+      description: |
+        This API lists all features configured for a specific data store.
+      operationId: listDataStoreFeatures
+      parameters:
+        - name: cluster
+          in: path
+          description: Name of the Kubernetes cluster
+          required: true
+          schema:
+            type: string
+        - name: namespace
+          in: path
+          description: Name of the namespace
+          required: true
+          schema:
+            type: string
+        - name: dataStore
+          in: path
+          description: Name of the data store
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+        '404':
+          description: Data store not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  '/clusters/{cluster}/namespaces/{namespace}/data-stores/{dataStore}/features/{feature}':
+    get:
+      tags:
+        - Data Store Feature
+      summary: Get data store feature
+      description: |
+        This API retrieves a specific feature configuration for a data store.
+      operationId: getDataStoreFeature
+      parameters:
+        - name: cluster
+          in: path
+          description: Name of the Kubernetes cluster
+          required: true
+          schema:
+            type: string
+        - name: namespace
+          in: path
+          description: Name of the namespace
+          required: true
+          schema:
+            type: string
+        - name: dataStore
+          in: path
+          description: Name of the data store
+          required: true
+          schema:
+            type: string
+        - name: feature
+          in: path
+          description: Name of the feature
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '404':
+          description: Feature or data store not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - Data Store Feature
+      summary: Update data store feature
+      description: |
+        This API updates an existing feature configuration for a data store.
+      operationId: updateDataStoreFeature
+      parameters:
+        - name: cluster
+          in: path
+          description: Name of the Kubernetes cluster
+          required: true
+          schema:
+            type: string
+        - name: namespace
+          in: path
+          description: Name of the namespace
+          required: true
+          schema:
+            type: string
+        - name: dataStore
+          in: path
+          description: Name of the data store
+          required: true
+          schema:
+            type: string
+        - name: feature
+          in: path
+          description: Name of the feature
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Unsuccessful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Feature or data store not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        description: The updated feature configuration
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+    delete:
+      tags:
+        - Data Store Feature
+      summary: Delete data store feature
+      description: |
+        This API deletes a feature configuration from a data store.
+      operationId: deleteDataStoreFeature
+      parameters:
+        - name: cluster
+          in: path
+          description: Name of the Kubernetes cluster
+          required: true
+          schema:
+            type: string
+        - name: namespace
+          in: path
+          description: Name of the namespace
+          required: true
+          schema:
+            type: string
+        - name: dataStore
+          in: path
+          description: Name of the data store
+          required: true
+          schema:
+            type: string
+        - name: feature
+          in: path
+          description: Name of the feature
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '204':
+          description: Deleted successfully
+        '404':
+          description: Feature or data store not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   '/namespaces/{namespace}/database-clusters':
     x-everest-resource-name: database-clusters
     post:
