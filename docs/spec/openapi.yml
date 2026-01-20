@@ -465,7 +465,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  '/clusters/{cluster}/namespaces/{namespace}/data-stores/{dataStore}/extensions':
+  '/clusters/{cluster}/namespaces/{namespace}/data-stores/{dataStore}/extensions/{extensionType}':
     post:
       tags:
         - Data Store Extension
@@ -500,6 +500,12 @@ paths:
         - name: dataStore
           in: path
           description: Name of the data store
+          required: true
+          schema:
+            type: string
+        - name: extensionType
+          in: path
+          description: Type of the extension
           required: true
           schema:
             type: string
@@ -546,7 +552,7 @@ paths:
         - Data Store Extension
       summary: List data store extensions
       description: |
-        This API lists all extensions configured for a specific data store.
+        This API lists extensions configured for a specific data store.
       operationId: listDataStoreExtensions
       parameters:
         - name: cluster
@@ -564,6 +570,12 @@ paths:
         - name: dataStore
           in: path
           description: Name of the data store
+          required: true
+          schema:
+            type: string
+        - name: extensionType
+          in: path
+          description: Type of the extension
           required: true
           schema:
             type: string
@@ -591,7 +603,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  '/clusters/{cluster}/namespaces/{namespace}/data-stores/{dataStore}/extensions/{extension}':
+  '/clusters/{cluster}/namespaces/{namespace}/data-stores/{dataStore}/extensions/{extensionType}/{extension}':
     get:
       tags:
         - Data Store Extension
@@ -615,6 +627,12 @@ paths:
         - name: dataStore
           in: path
           description: Name of the data store
+          required: true
+          schema:
+            type: string
+        - name: extensionType
+          in: path
+          description: Type of the extension
           required: true
           schema:
             type: string
@@ -666,6 +684,12 @@ paths:
         - name: dataStore
           in: path
           description: Name of the data store
+          required: true
+          schema:
+            type: string
+        - name: extensionType
+          in: path
+          description: Type of the extension
           required: true
           schema:
             type: string
@@ -730,6 +754,12 @@ paths:
         - name: dataStore
           in: path
           description: Name of the data store
+          required: true
+          schema:
+            type: string
+        - name: extensionType
+          in: path
+          description: Type of the extension
           required: true
           schema:
             type: string

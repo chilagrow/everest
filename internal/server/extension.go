@@ -23,27 +23,27 @@ import (
 )
 
 // ListDataStoreExtensions lists extensions of the data store.
-func (e *EverestServer) ListDataStoreExtensions(c echo.Context, cluster, namespace, dataStore string) error {
+func (e *EverestServer) ListDataStoreExtensions(c echo.Context, cluster, namespace, dataStore, extensionType string) error {
 	return errors.New("not implemented")
 }
 
 // CreateDataStoreExtension creates an extension for the data store in the Everest server.
-func (e *EverestServer) CreateDataStoreExtension(c echo.Context, cluster, namespace, dataStore string) error {
+func (e *EverestServer) CreateDataStoreExtension(c echo.Context, cluster, namespace, dataStore, extensionType string) error {
 	return errors.New("not implemented")
 }
 
 // DeleteDataStoreExtension deletes an extension of the data store in the Everest server.
-func (e *EverestServer) DeleteDataStoreExtension(c echo.Context, cluster, namespace, dataStore, extension string) error {
+func (e *EverestServer) DeleteDataStoreExtension(c echo.Context, cluster, namespace, dataStore, extension, extensionType string) error {
 	return errors.New("not implemented")
 }
 
 // GetDataStoreExtension gets an extension of the data store in the Everest server.
-func (e *EverestServer) GetDataStoreExtension(c echo.Context, cluster, namespace, dataStore, extension string) error {
+func (e *EverestServer) GetDataStoreExtension(c echo.Context, cluster, namespace, dataStore, extension, extensionType string) error {
 	return errors.New("not implemented")
 }
 
 // UpdateDataStoreExtension updates an extension of the data store in the Everest server.
-func (e *EverestServer) UpdateDataStoreExtension(c echo.Context, cluster, namespace, dataStore, extension string) error {
+func (e *EverestServer) UpdateDataStoreExtension(c echo.Context, cluster, namespace, dataStore, extension, extensionType string) error {
 	return errors.New("not implemented")
 }
 

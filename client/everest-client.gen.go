@@ -5939,23 +5939,23 @@ type ClientInterface interface {
 	GetKubernetesClusterInfo(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListDataStoreExtensions request
-	ListDataStoreExtensions(ctx context.Context, cluster string, namespace string, dataStore string, reqEditors ...RequestEditorFn) (*http.Response, error)
+	ListDataStoreExtensions(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// CreateDataStoreExtensionWithBody request with any body
-	CreateDataStoreExtensionWithBody(ctx context.Context, cluster string, namespace string, dataStore string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+	CreateDataStoreExtensionWithBody(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	CreateDataStoreExtension(ctx context.Context, cluster string, namespace string, dataStore string, body CreateDataStoreExtensionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+	CreateDataStoreExtension(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, body CreateDataStoreExtensionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// DeleteDataStoreExtension request
-	DeleteDataStoreExtension(ctx context.Context, cluster string, namespace string, dataStore string, extension string, reqEditors ...RequestEditorFn) (*http.Response, error)
+	DeleteDataStoreExtension(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, extension string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetDataStoreExtension request
-	GetDataStoreExtension(ctx context.Context, cluster string, namespace string, dataStore string, extension string, reqEditors ...RequestEditorFn) (*http.Response, error)
+	GetDataStoreExtension(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, extension string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// UpdateDataStoreExtensionWithBody request with any body
-	UpdateDataStoreExtensionWithBody(ctx context.Context, cluster string, namespace string, dataStore string, extension string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+	UpdateDataStoreExtensionWithBody(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, extension string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	UpdateDataStoreExtension(ctx context.Context, cluster string, namespace string, dataStore string, extension string, body UpdateDataStoreExtensionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+	UpdateDataStoreExtension(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, extension string, body UpdateDataStoreExtensionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListProviderExtensions request
 	ListProviderExtensions(ctx context.Context, cluster string, namespace string, provider string, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -6191,8 +6191,8 @@ func (c *Client) GetKubernetesClusterInfo(ctx context.Context, reqEditors ...Req
 	return c.Client.Do(req)
 }
 
-func (c *Client) ListDataStoreExtensions(ctx context.Context, cluster string, namespace string, dataStore string, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewListDataStoreExtensionsRequest(c.Server, cluster, namespace, dataStore)
+func (c *Client) ListDataStoreExtensions(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListDataStoreExtensionsRequest(c.Server, cluster, namespace, dataStore, extensionType)
 	if err != nil {
 		return nil, err
 	}
@@ -6203,8 +6203,8 @@ func (c *Client) ListDataStoreExtensions(ctx context.Context, cluster string, na
 	return c.Client.Do(req)
 }
 
-func (c *Client) CreateDataStoreExtensionWithBody(ctx context.Context, cluster string, namespace string, dataStore string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewCreateDataStoreExtensionRequestWithBody(c.Server, cluster, namespace, dataStore, contentType, body)
+func (c *Client) CreateDataStoreExtensionWithBody(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateDataStoreExtensionRequestWithBody(c.Server, cluster, namespace, dataStore, extensionType, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -6215,8 +6215,8 @@ func (c *Client) CreateDataStoreExtensionWithBody(ctx context.Context, cluster s
 	return c.Client.Do(req)
 }
 
-func (c *Client) CreateDataStoreExtension(ctx context.Context, cluster string, namespace string, dataStore string, body CreateDataStoreExtensionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewCreateDataStoreExtensionRequest(c.Server, cluster, namespace, dataStore, body)
+func (c *Client) CreateDataStoreExtension(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, body CreateDataStoreExtensionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateDataStoreExtensionRequest(c.Server, cluster, namespace, dataStore, extensionType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -6227,8 +6227,8 @@ func (c *Client) CreateDataStoreExtension(ctx context.Context, cluster string, n
 	return c.Client.Do(req)
 }
 
-func (c *Client) DeleteDataStoreExtension(ctx context.Context, cluster string, namespace string, dataStore string, extension string, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewDeleteDataStoreExtensionRequest(c.Server, cluster, namespace, dataStore, extension)
+func (c *Client) DeleteDataStoreExtension(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, extension string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteDataStoreExtensionRequest(c.Server, cluster, namespace, dataStore, extensionType, extension)
 	if err != nil {
 		return nil, err
 	}
@@ -6239,8 +6239,8 @@ func (c *Client) DeleteDataStoreExtension(ctx context.Context, cluster string, n
 	return c.Client.Do(req)
 }
 
-func (c *Client) GetDataStoreExtension(ctx context.Context, cluster string, namespace string, dataStore string, extension string, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewGetDataStoreExtensionRequest(c.Server, cluster, namespace, dataStore, extension)
+func (c *Client) GetDataStoreExtension(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, extension string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetDataStoreExtensionRequest(c.Server, cluster, namespace, dataStore, extensionType, extension)
 	if err != nil {
 		return nil, err
 	}
@@ -6251,8 +6251,8 @@ func (c *Client) GetDataStoreExtension(ctx context.Context, cluster string, name
 	return c.Client.Do(req)
 }
 
-func (c *Client) UpdateDataStoreExtensionWithBody(ctx context.Context, cluster string, namespace string, dataStore string, extension string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewUpdateDataStoreExtensionRequestWithBody(c.Server, cluster, namespace, dataStore, extension, contentType, body)
+func (c *Client) UpdateDataStoreExtensionWithBody(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, extension string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateDataStoreExtensionRequestWithBody(c.Server, cluster, namespace, dataStore, extensionType, extension, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -6263,8 +6263,8 @@ func (c *Client) UpdateDataStoreExtensionWithBody(ctx context.Context, cluster s
 	return c.Client.Do(req)
 }
 
-func (c *Client) UpdateDataStoreExtension(ctx context.Context, cluster string, namespace string, dataStore string, extension string, body UpdateDataStoreExtensionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewUpdateDataStoreExtensionRequest(c.Server, cluster, namespace, dataStore, extension, body)
+func (c *Client) UpdateDataStoreExtension(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, extension string, body UpdateDataStoreExtensionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateDataStoreExtensionRequest(c.Server, cluster, namespace, dataStore, extensionType, extension, body)
 	if err != nil {
 		return nil, err
 	}
@@ -7263,7 +7263,7 @@ func NewGetKubernetesClusterInfoRequest(server string) (*http.Request, error) {
 }
 
 // NewListDataStoreExtensionsRequest generates requests for ListDataStoreExtensions
-func NewListDataStoreExtensionsRequest(server string, cluster string, namespace string, dataStore string) (*http.Request, error) {
+func NewListDataStoreExtensionsRequest(server string, cluster string, namespace string, dataStore string, extensionType string) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -7287,12 +7287,19 @@ func NewListDataStoreExtensionsRequest(server string, cluster string, namespace 
 		return nil, err
 	}
 
+	var pathParam3 string
+
+	pathParam3, err = runtime.StyleParamWithLocation("simple", false, "extensionType", runtime.ParamLocationPath, extensionType)
+	if err != nil {
+		return nil, err
+	}
+
 	serverURL, err := url.Parse(server)
 	if err != nil {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/clusters/%s/namespaces/%s/data-stores/%s/extensions", pathParam0, pathParam1, pathParam2)
+	operationPath := fmt.Sprintf("/clusters/%s/namespaces/%s/data-stores/%s/extensions/%s", pathParam0, pathParam1, pathParam2, pathParam3)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -7311,18 +7318,18 @@ func NewListDataStoreExtensionsRequest(server string, cluster string, namespace 
 }
 
 // NewCreateDataStoreExtensionRequest calls the generic CreateDataStoreExtension builder with application/json body
-func NewCreateDataStoreExtensionRequest(server string, cluster string, namespace string, dataStore string, body CreateDataStoreExtensionJSONRequestBody) (*http.Request, error) {
+func NewCreateDataStoreExtensionRequest(server string, cluster string, namespace string, dataStore string, extensionType string, body CreateDataStoreExtensionJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
 	buf, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
 	bodyReader = bytes.NewReader(buf)
-	return NewCreateDataStoreExtensionRequestWithBody(server, cluster, namespace, dataStore, "application/json", bodyReader)
+	return NewCreateDataStoreExtensionRequestWithBody(server, cluster, namespace, dataStore, extensionType, "application/json", bodyReader)
 }
 
 // NewCreateDataStoreExtensionRequestWithBody generates requests for CreateDataStoreExtension with any type of body
-func NewCreateDataStoreExtensionRequestWithBody(server string, cluster string, namespace string, dataStore string, contentType string, body io.Reader) (*http.Request, error) {
+func NewCreateDataStoreExtensionRequestWithBody(server string, cluster string, namespace string, dataStore string, extensionType string, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -7346,12 +7353,19 @@ func NewCreateDataStoreExtensionRequestWithBody(server string, cluster string, n
 		return nil, err
 	}
 
+	var pathParam3 string
+
+	pathParam3, err = runtime.StyleParamWithLocation("simple", false, "extensionType", runtime.ParamLocationPath, extensionType)
+	if err != nil {
+		return nil, err
+	}
+
 	serverURL, err := url.Parse(server)
 	if err != nil {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/clusters/%s/namespaces/%s/data-stores/%s/extensions", pathParam0, pathParam1, pathParam2)
+	operationPath := fmt.Sprintf("/clusters/%s/namespaces/%s/data-stores/%s/extensions/%s", pathParam0, pathParam1, pathParam2, pathParam3)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -7372,7 +7386,7 @@ func NewCreateDataStoreExtensionRequestWithBody(server string, cluster string, n
 }
 
 // NewDeleteDataStoreExtensionRequest generates requests for DeleteDataStoreExtension
-func NewDeleteDataStoreExtensionRequest(server string, cluster string, namespace string, dataStore string, extension string) (*http.Request, error) {
+func NewDeleteDataStoreExtensionRequest(server string, cluster string, namespace string, dataStore string, extensionType string, extension string) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -7398,7 +7412,14 @@ func NewDeleteDataStoreExtensionRequest(server string, cluster string, namespace
 
 	var pathParam3 string
 
-	pathParam3, err = runtime.StyleParamWithLocation("simple", false, "extension", runtime.ParamLocationPath, extension)
+	pathParam3, err = runtime.StyleParamWithLocation("simple", false, "extensionType", runtime.ParamLocationPath, extensionType)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam4 string
+
+	pathParam4, err = runtime.StyleParamWithLocation("simple", false, "extension", runtime.ParamLocationPath, extension)
 	if err != nil {
 		return nil, err
 	}
@@ -7408,7 +7429,7 @@ func NewDeleteDataStoreExtensionRequest(server string, cluster string, namespace
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/clusters/%s/namespaces/%s/data-stores/%s/extensions/%s", pathParam0, pathParam1, pathParam2, pathParam3)
+	operationPath := fmt.Sprintf("/clusters/%s/namespaces/%s/data-stores/%s/extensions/%s/%s", pathParam0, pathParam1, pathParam2, pathParam3, pathParam4)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -7427,7 +7448,7 @@ func NewDeleteDataStoreExtensionRequest(server string, cluster string, namespace
 }
 
 // NewGetDataStoreExtensionRequest generates requests for GetDataStoreExtension
-func NewGetDataStoreExtensionRequest(server string, cluster string, namespace string, dataStore string, extension string) (*http.Request, error) {
+func NewGetDataStoreExtensionRequest(server string, cluster string, namespace string, dataStore string, extensionType string, extension string) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -7453,7 +7474,14 @@ func NewGetDataStoreExtensionRequest(server string, cluster string, namespace st
 
 	var pathParam3 string
 
-	pathParam3, err = runtime.StyleParamWithLocation("simple", false, "extension", runtime.ParamLocationPath, extension)
+	pathParam3, err = runtime.StyleParamWithLocation("simple", false, "extensionType", runtime.ParamLocationPath, extensionType)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam4 string
+
+	pathParam4, err = runtime.StyleParamWithLocation("simple", false, "extension", runtime.ParamLocationPath, extension)
 	if err != nil {
 		return nil, err
 	}
@@ -7463,7 +7491,7 @@ func NewGetDataStoreExtensionRequest(server string, cluster string, namespace st
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/clusters/%s/namespaces/%s/data-stores/%s/extensions/%s", pathParam0, pathParam1, pathParam2, pathParam3)
+	operationPath := fmt.Sprintf("/clusters/%s/namespaces/%s/data-stores/%s/extensions/%s/%s", pathParam0, pathParam1, pathParam2, pathParam3, pathParam4)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -7482,18 +7510,18 @@ func NewGetDataStoreExtensionRequest(server string, cluster string, namespace st
 }
 
 // NewUpdateDataStoreExtensionRequest calls the generic UpdateDataStoreExtension builder with application/json body
-func NewUpdateDataStoreExtensionRequest(server string, cluster string, namespace string, dataStore string, extension string, body UpdateDataStoreExtensionJSONRequestBody) (*http.Request, error) {
+func NewUpdateDataStoreExtensionRequest(server string, cluster string, namespace string, dataStore string, extensionType string, extension string, body UpdateDataStoreExtensionJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
 	buf, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
 	bodyReader = bytes.NewReader(buf)
-	return NewUpdateDataStoreExtensionRequestWithBody(server, cluster, namespace, dataStore, extension, "application/json", bodyReader)
+	return NewUpdateDataStoreExtensionRequestWithBody(server, cluster, namespace, dataStore, extensionType, extension, "application/json", bodyReader)
 }
 
 // NewUpdateDataStoreExtensionRequestWithBody generates requests for UpdateDataStoreExtension with any type of body
-func NewUpdateDataStoreExtensionRequestWithBody(server string, cluster string, namespace string, dataStore string, extension string, contentType string, body io.Reader) (*http.Request, error) {
+func NewUpdateDataStoreExtensionRequestWithBody(server string, cluster string, namespace string, dataStore string, extensionType string, extension string, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -7519,7 +7547,14 @@ func NewUpdateDataStoreExtensionRequestWithBody(server string, cluster string, n
 
 	var pathParam3 string
 
-	pathParam3, err = runtime.StyleParamWithLocation("simple", false, "extension", runtime.ParamLocationPath, extension)
+	pathParam3, err = runtime.StyleParamWithLocation("simple", false, "extensionType", runtime.ParamLocationPath, extensionType)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam4 string
+
+	pathParam4, err = runtime.StyleParamWithLocation("simple", false, "extension", runtime.ParamLocationPath, extension)
 	if err != nil {
 		return nil, err
 	}
@@ -7529,7 +7564,7 @@ func NewUpdateDataStoreExtensionRequestWithBody(server string, cluster string, n
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/clusters/%s/namespaces/%s/data-stores/%s/extensions/%s", pathParam0, pathParam1, pathParam2, pathParam3)
+	operationPath := fmt.Sprintf("/clusters/%s/namespaces/%s/data-stores/%s/extensions/%s/%s", pathParam0, pathParam1, pathParam2, pathParam3, pathParam4)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -10338,23 +10373,23 @@ type ClientWithResponsesInterface interface {
 	GetKubernetesClusterInfoWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetKubernetesClusterInfoResponse, error)
 
 	// ListDataStoreExtensionsWithResponse request
-	ListDataStoreExtensionsWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, reqEditors ...RequestEditorFn) (*ListDataStoreExtensionsResponse, error)
+	ListDataStoreExtensionsWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, reqEditors ...RequestEditorFn) (*ListDataStoreExtensionsResponse, error)
 
 	// CreateDataStoreExtensionWithBodyWithResponse request with any body
-	CreateDataStoreExtensionWithBodyWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateDataStoreExtensionResponse, error)
+	CreateDataStoreExtensionWithBodyWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateDataStoreExtensionResponse, error)
 
-	CreateDataStoreExtensionWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, body CreateDataStoreExtensionJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateDataStoreExtensionResponse, error)
+	CreateDataStoreExtensionWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, body CreateDataStoreExtensionJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateDataStoreExtensionResponse, error)
 
 	// DeleteDataStoreExtensionWithResponse request
-	DeleteDataStoreExtensionWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, extension string, reqEditors ...RequestEditorFn) (*DeleteDataStoreExtensionResponse, error)
+	DeleteDataStoreExtensionWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, extension string, reqEditors ...RequestEditorFn) (*DeleteDataStoreExtensionResponse, error)
 
 	// GetDataStoreExtensionWithResponse request
-	GetDataStoreExtensionWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, extension string, reqEditors ...RequestEditorFn) (*GetDataStoreExtensionResponse, error)
+	GetDataStoreExtensionWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, extension string, reqEditors ...RequestEditorFn) (*GetDataStoreExtensionResponse, error)
 
 	// UpdateDataStoreExtensionWithBodyWithResponse request with any body
-	UpdateDataStoreExtensionWithBodyWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, extension string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateDataStoreExtensionResponse, error)
+	UpdateDataStoreExtensionWithBodyWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, extension string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateDataStoreExtensionResponse, error)
 
-	UpdateDataStoreExtensionWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, extension string, body UpdateDataStoreExtensionJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateDataStoreExtensionResponse, error)
+	UpdateDataStoreExtensionWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, extension string, body UpdateDataStoreExtensionJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateDataStoreExtensionResponse, error)
 
 	// ListProviderExtensionsWithResponse request
 	ListProviderExtensionsWithResponse(ctx context.Context, cluster string, namespace string, provider string, reqEditors ...RequestEditorFn) (*ListProviderExtensionsResponse, error)
@@ -12206,8 +12241,8 @@ func (c *ClientWithResponses) GetKubernetesClusterInfoWithResponse(ctx context.C
 }
 
 // ListDataStoreExtensionsWithResponse request returning *ListDataStoreExtensionsResponse
-func (c *ClientWithResponses) ListDataStoreExtensionsWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, reqEditors ...RequestEditorFn) (*ListDataStoreExtensionsResponse, error) {
-	rsp, err := c.ListDataStoreExtensions(ctx, cluster, namespace, dataStore, reqEditors...)
+func (c *ClientWithResponses) ListDataStoreExtensionsWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, reqEditors ...RequestEditorFn) (*ListDataStoreExtensionsResponse, error) {
+	rsp, err := c.ListDataStoreExtensions(ctx, cluster, namespace, dataStore, extensionType, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
@@ -12215,16 +12250,16 @@ func (c *ClientWithResponses) ListDataStoreExtensionsWithResponse(ctx context.Co
 }
 
 // CreateDataStoreExtensionWithBodyWithResponse request with arbitrary body returning *CreateDataStoreExtensionResponse
-func (c *ClientWithResponses) CreateDataStoreExtensionWithBodyWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateDataStoreExtensionResponse, error) {
-	rsp, err := c.CreateDataStoreExtensionWithBody(ctx, cluster, namespace, dataStore, contentType, body, reqEditors...)
+func (c *ClientWithResponses) CreateDataStoreExtensionWithBodyWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateDataStoreExtensionResponse, error) {
+	rsp, err := c.CreateDataStoreExtensionWithBody(ctx, cluster, namespace, dataStore, extensionType, contentType, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
 	return ParseCreateDataStoreExtensionResponse(rsp)
 }
 
-func (c *ClientWithResponses) CreateDataStoreExtensionWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, body CreateDataStoreExtensionJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateDataStoreExtensionResponse, error) {
-	rsp, err := c.CreateDataStoreExtension(ctx, cluster, namespace, dataStore, body, reqEditors...)
+func (c *ClientWithResponses) CreateDataStoreExtensionWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, body CreateDataStoreExtensionJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateDataStoreExtensionResponse, error) {
+	rsp, err := c.CreateDataStoreExtension(ctx, cluster, namespace, dataStore, extensionType, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
@@ -12232,8 +12267,8 @@ func (c *ClientWithResponses) CreateDataStoreExtensionWithResponse(ctx context.C
 }
 
 // DeleteDataStoreExtensionWithResponse request returning *DeleteDataStoreExtensionResponse
-func (c *ClientWithResponses) DeleteDataStoreExtensionWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, extension string, reqEditors ...RequestEditorFn) (*DeleteDataStoreExtensionResponse, error) {
-	rsp, err := c.DeleteDataStoreExtension(ctx, cluster, namespace, dataStore, extension, reqEditors...)
+func (c *ClientWithResponses) DeleteDataStoreExtensionWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, extension string, reqEditors ...RequestEditorFn) (*DeleteDataStoreExtensionResponse, error) {
+	rsp, err := c.DeleteDataStoreExtension(ctx, cluster, namespace, dataStore, extensionType, extension, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
@@ -12241,8 +12276,8 @@ func (c *ClientWithResponses) DeleteDataStoreExtensionWithResponse(ctx context.C
 }
 
 // GetDataStoreExtensionWithResponse request returning *GetDataStoreExtensionResponse
-func (c *ClientWithResponses) GetDataStoreExtensionWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, extension string, reqEditors ...RequestEditorFn) (*GetDataStoreExtensionResponse, error) {
-	rsp, err := c.GetDataStoreExtension(ctx, cluster, namespace, dataStore, extension, reqEditors...)
+func (c *ClientWithResponses) GetDataStoreExtensionWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, extension string, reqEditors ...RequestEditorFn) (*GetDataStoreExtensionResponse, error) {
+	rsp, err := c.GetDataStoreExtension(ctx, cluster, namespace, dataStore, extensionType, extension, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
@@ -12250,16 +12285,16 @@ func (c *ClientWithResponses) GetDataStoreExtensionWithResponse(ctx context.Cont
 }
 
 // UpdateDataStoreExtensionWithBodyWithResponse request with arbitrary body returning *UpdateDataStoreExtensionResponse
-func (c *ClientWithResponses) UpdateDataStoreExtensionWithBodyWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, extension string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateDataStoreExtensionResponse, error) {
-	rsp, err := c.UpdateDataStoreExtensionWithBody(ctx, cluster, namespace, dataStore, extension, contentType, body, reqEditors...)
+func (c *ClientWithResponses) UpdateDataStoreExtensionWithBodyWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, extension string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateDataStoreExtensionResponse, error) {
+	rsp, err := c.UpdateDataStoreExtensionWithBody(ctx, cluster, namespace, dataStore, extensionType, extension, contentType, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
 	return ParseUpdateDataStoreExtensionResponse(rsp)
 }
 
-func (c *ClientWithResponses) UpdateDataStoreExtensionWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, extension string, body UpdateDataStoreExtensionJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateDataStoreExtensionResponse, error) {
-	rsp, err := c.UpdateDataStoreExtension(ctx, cluster, namespace, dataStore, extension, body, reqEditors...)
+func (c *ClientWithResponses) UpdateDataStoreExtensionWithResponse(ctx context.Context, cluster string, namespace string, dataStore string, extensionType string, extension string, body UpdateDataStoreExtensionJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateDataStoreExtensionResponse, error) {
+	rsp, err := c.UpdateDataStoreExtension(ctx, cluster, namespace, dataStore, extensionType, extension, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
@@ -16027,99 +16062,100 @@ var swaggerSpec = []string{
 	"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",
-	"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",
+	"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",
+	"AP//WERfQkDzBQA=",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
