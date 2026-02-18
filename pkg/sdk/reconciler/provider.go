@@ -64,6 +64,7 @@ type ReconcilerOption func(*reconcilerOptions)
 
 type reconcilerOptions struct {
 	serverConfig *server.ServerConfig
+	addToScheme  func(s *runtime.Scheme) error
 }
 
 // WithServer enables the integrated HTTP server for schema exposure and validation webhook.
@@ -92,6 +93,21 @@ func WithServer(config server.ServerConfig) ReconcilerOption {
 	}
 }
 
+// WithAddToScheme allows providers to register their custom types into the reconciler's scheme.
+//
+// Example:
+//
+//	r, err := reconciler.NewFromInterface(provider,
+//	    reconciler.WithAddToScheme(everestv1alpha1.AddToScheme),
+//	)
+//
+// Use this if the provider's Sync or Status methods use custom Kubernetes types.
+func WithAddToScheme(addToScheme func(s *runtime.Scheme) error) ReconcilerOption {
+	return func(o *reconcilerOptions) {
+		o.addToScheme = addToScheme
+	}
+}
+
 // newReconciler creates a reconciler from any provider that satisfies providerAdapter.
 func newReconciler(p providerAdapter, opts ...ReconcilerOption) (*ProviderReconciler, error) {
 	// Apply options
@@ -109,6 +125,13 @@ func newReconciler(p providerAdapter, opts ...ReconcilerOption) (*ProviderReconc
 	// Register core types
 	if err := v1alpha1.AddToScheme(scheme); err != nil {
 		return nil, fmt.Errorf("failed to add v1alpha1 scheme: %w", err)
+	}
+
+	// Register custom scheme if provided
+	if options.addToScheme != nil {
+		if err := options.addToScheme(scheme); err != nil {
+			return nil, fmt.Errorf("failed to add custom scheme: %w", err)
+		}
 	}
 
 	// Register provider-specific types
