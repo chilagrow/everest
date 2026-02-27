@@ -76,6 +76,7 @@ type ReconcilerOption func(*reconcilerOptions)
 type reconcilerOptions struct {
 	serverConfig       *server.ServerConfig
 	metricsBindAddress string
+	manager            ctrl.Manager
 }
 
 // WithServer enables the integrated HTTP server for the validation webhook.
@@ -124,6 +125,12 @@ func WithMetrics(bindAddress string) ReconcilerOption {
 	}
 }
 
+func WithManager(mgr ctrl.Manager) ReconcilerOption {
+	return func(o *reconcilerOptions) {
+		o.manager = mgr
+	}
+}
+
 // newReconciler creates a reconciler from any provider that satisfies providerAdapter.
 func newReconciler(ctx context.Context, p providerAdapter, opts ...ReconcilerOption) (*ProviderReconciler, error) {
 	// Apply options
@@ -131,38 +138,42 @@ func newReconciler(ctx context.Context, p providerAdapter, opts ...ReconcilerOpt
 	for _, opt := range opts {
 		opt(options)
 	}
-	scheme := runtime.NewScheme()
+
+	ctrl.SetLogger(zap.New(zap.UseFlagOptions(&zap.Options{Development: true})))
+
+	mgr := options.manager
+
+	if mgr == nil {
+		// Configure manager options
+		mgrOpts := ctrl.Options{}
+		if options.metricsBindAddress != "" {
+			mgrOpts.Metrics = metricsserver.Options{
+				BindAddress: options.metricsBindAddress,
+			}
+		}
+
+		var err error
+		mgr, err = ctrl.NewManager(ctrl.GetConfigOrDie(), mgrOpts)
+		if err != nil {
+			return nil, fmt.Errorf("failed to create manager: %w", err)
+		}
+	}
 
 	// Register core Kubernetes types
-	if err := corev1.AddToScheme(scheme); err != nil {
+	if err := corev1.AddToScheme(mgr.GetScheme()); err != nil {
 		return nil, fmt.Errorf("failed to add corev1 scheme: %w", err)
 	}
 
 	// Register core types
-	if err := v1alpha1.AddToScheme(scheme); err != nil {
+	if err := v1alpha1.AddToScheme(mgr.GetScheme()); err != nil {
 		return nil, fmt.Errorf("failed to add v1alpha1 scheme: %w", err)
 	}
 
 	// Register provider-specific types
 	if typesFunc := p.Types(); typesFunc != nil {
-		if err := typesFunc(scheme); err != nil {
+		if err := typesFunc(mgr.GetScheme()); err != nil {
 			return nil, fmt.Errorf("failed to add provider scheme: %w", err)
 		}
-	}
-
-	ctrl.SetLogger(zap.New(zap.UseFlagOptions(&zap.Options{Development: true})))
-
-	// Configure manager options
-	mgrOpts := ctrl.Options{Scheme: scheme}
-	if options.metricsBindAddress != "" {
-		mgrOpts.Metrics = metricsserver.Options{
-			BindAddress: options.metricsBindAddress,
-		}
-	}
-
-	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), mgrOpts)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create manager: %w", err)
 	}
 
 	// Setup field indexes if provider implements FieldIndexProvider
