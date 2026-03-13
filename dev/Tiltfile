@@ -644,7 +644,7 @@ local_resource(
         '{0}/api'.format(backend_dir),
         '{0}/cmd'.format(backend_dir),
         '{0}/pkg'.format(backend_dir),
-        '{0}/public'.format(backend_dir),
+        '{0}/public/dist/static'.format(backend_dir),
         '{0}/internal'.format(backend_dir),
     ],
     ignore=[
