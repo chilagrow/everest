@@ -3034,6 +3034,251 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  '/clusters/{cluster}/namespaces/{namespace}/monitoring-configs':
+    x-everest-resource-name: monitoring-configs
+    post:
+      tags:
+        - Monitoring
+      summary: Create monitoring config
+      description: |
+        This API creates a new monitoring config.
+
+        A monitoring config object requires `type` to be set.
+        Based on the `type` the respective key with configuration needs to be set.
+        Such as, if `type: pmm`, then `pmm` key needs to be provided with a configuration.
+      operationId: createMonitoringConfig
+      parameters:
+        - name: cluster
+          in: path
+          required: true
+          description: The name of the cluster
+          schema:
+            type: string
+        - name: namespace
+          in: path
+          description: Namespace of the monitoring config
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonitoringConfig'
+        '400':
+          description: Unsuccessful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        description: The Monitoring config object to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MonitoringConfigCreateParams'
+    get:
+      tags:
+        - Monitoring
+      summary: List monitoring configs
+      description: This API lists all monitoring configs in a given namespace.
+      operationId: listMonitoringConfigs
+      parameters:
+        - name: cluster
+          in: path
+          required: true
+          description: The name of the cluster
+          schema:
+            type: string
+        - name: namespace
+          in: path
+          description: Namespace of the monitoring configs
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonitoringConfigsList'
+        '400':
+          description: Unsuccessful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  '/clusters/{cluster}/namespaces/{namespace}/monitoring-configs/{name}':
+    x-everest-resource-name: monitoring-configs
+    get:
+      tags:
+        - Monitoring
+      summary: Get monitoring config
+      description: This API gets the monitoring config specified by the `name`.
+      operationId: getMonitoringConfig
+      parameters:
+        - name: cluster
+          in: path
+          required: true
+          description: The name of the cluster
+          schema:
+            type: string
+        - name: name
+          in: path
+          description: Name of the monitoring config
+          required: true
+          schema:
+            type: string
+        - name: namespace
+          in: path
+          description: Namespace of the monitoring config
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonitoringConfig'
+        '400':
+          description: Unsuccessful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Monitoring config not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      tags:
+        - Monitoring
+      summary: Update monitoring config
+      description: This API updates the monitoring config specified by the `name`.
+      operationId: updateMonitoringConfig
+      parameters:
+        - name: cluster
+          in: path
+          required: true
+          description: The name of the cluster
+          schema:
+            type: string
+        - name: name
+          in: path
+          description: Name of the monitoring config
+          required: true
+          schema:
+            type: string
+        - name: namespace
+          in: path
+          description: Namespace of the monitoring config
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonitoringConfig'
+        '400':
+          description: Unsuccessful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Monitoring config not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        description: The monitoring config object to be updated.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MonitoringConfigUpdateParams'
+    delete:
+      tags:
+        - Monitoring
+      summary: Delete monitoring config
+      description: This API deletes the monitoring config specified by the `name`.
+      operationId: deleteMonitoringConfig
+      parameters:
+        - name: cluster
+          in: path
+          required: true
+          description: The name of the cluster
+          schema:
+            type: string
+        - name: name
+          in: path
+          description: Name of the monitoring config
+          required: true
+          schema:
+            type: string
+        - name: namespace
+          in: path
+          description: Namespace of the monitoring config
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Successful operation
+        '400':
+          description: Unsuccessful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Monitoring config not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   securitySchemes:
     BearerAuth:
