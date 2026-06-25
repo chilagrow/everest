@@ -54,7 +54,7 @@ jobs:
       IS_RC: 0
       ARCH: ""
       OS: ""
-      IMAGE_PREFIX: 'ghcr.io/openeverest'
+      IMAGE_PREFIX: 'ghcr.io/${{ github.repository_owner }}'
       EVEREST_SERVER_IMAGE_NAME: 'openeverest'
       EVEREST_SERVER_DEV_IMAGE_NAME: 'openeverest-dev'
       EVEREST_OPERATOR_IMAGE_NAME: 'openeverest-operator'
@@ -545,7 +545,7 @@ jobs:
     
     env:
       REGISTRY: ghcr.io
-      IMAGE_PREFIX: 'ghcr.io/openeverest'
+      IMAGE_PREFIX: 'ghcr.io/${{ github.repository_owner }}'
       VERSION: ${{ github.event.inputs.version }}
       IS_RC: ${{ contains(github.event.inputs.version, '-rc') }}
 
